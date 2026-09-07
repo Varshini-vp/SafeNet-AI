@@ -18,8 +18,19 @@ def create_app():
     app.config.from_object(Config)
 
     # Enable CORS for frontend
-    CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
-
+    CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:5173",
+                "https://safenet-ai-nn3r.onrender.com"
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    }
+)
     # Connect DB and Seed Data
     with app.app_context():
         db_manager.connect()
