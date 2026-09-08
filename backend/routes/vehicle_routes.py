@@ -20,7 +20,7 @@ def get_vehicles():
     if camera_id and camera_id.upper() != "ALL":
         query["cameraId"] = camera_id
 
-    vehicles = db.vehicles.find(query, sort=[("timestamp", -1)], limit=limit)
+    vehicles = list(db.vehicles.find(query, sort=[("timestamp", -1)], limit=limit))
     return jsonify({
         "success": True,
         "count": len(vehicles),
@@ -37,9 +37,9 @@ def get_live_vehicles():
     live_tracked = []
     
     # Fetch recent vehicles for this camera or generate dynamic active tracks
-    recent = db.vehicles.find({"cameraId": camera_id}, limit=8)
+    recent = list(db.vehicles.find({"cameraId": camera_id}, limit=8))
     if not recent:
-        recent = db.vehicles.find({}, limit=8)
+        recent = list(db.vehicles.find({}, limit=8))
 
     for i, v in enumerate(recent):
         lane = v.get("lane", (i % 3) + 1)
