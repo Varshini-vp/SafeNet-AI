@@ -25,7 +25,7 @@ def get_alerts():
     if camera_id and camera_id.upper() != "ALL":
         query["cameraId"] = camera_id
 
-    alerts = db.alerts.find(query, sort=[("timestamp", -1)], limit=limit)
+    alerts = list(db.alerts.find(query, sort=[("timestamp", -1)], limit=limit))
     return jsonify({
         "success": True,
         "count": len(alerts),
@@ -35,7 +35,7 @@ def get_alerts():
 @alert_bp.route("/active", methods=["GET"])
 def get_active_alerts():
     db = get_db()
-    alerts = db.alerts.find({"status": "ACTIVE"}, sort=[("timestamp", -1)], limit=10)
+    alerts = list(db.alerts.find({"status": "ACTIVE"}, sort=[("timestamp", -1)], limit=10))
     return jsonify({
         "success": True,
         "activeCount": len(alerts),
